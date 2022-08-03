@@ -9,7 +9,6 @@ import (
 
 	"github.com/octodemo/advanced-security-go/models"
 
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -53,33 +52,9 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	author := r.URL.Query().Get("author")
 	read := r.URL.Query().Get("read")
 
-	if len(name) > 0 {
-		bks, err := models.NameQuery(name)
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
-		}
-
-		for _, bk := range bks {
-			fmt.Fprintf(w, "%s, %s, %s\n", bk.Title, bk.Author, bk.Read)
-		}
-
-	} else if len(author) > 0 {
-		bks, err := models.AuthorQuery(author)
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
-		}
-
-		for _, bk := range bks {
-			fmt.Fprintf(w, "%s, %s, %s\n", bk.Title, bk.Author, bk.Read)
-		}
-
-	} else if len(read) > 0 {
+	if len(read) > 0 {
 		bks, err := models.ReadQuery(read)
 		if err != nil {
 			http.Error(w, http.StatusText(500), 500)
@@ -90,15 +65,5 @@ func handler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "%s, %s, %s\n", bk.Title, bk.Author, bk.Read)
 		}
 
-	} else {
-		bks, err := models.AllBooks()
-		if err != nil {
-			http.Error(w, http.StatusText(500), 500)
-			return
-		}
-
-		for _, bk := range bks {
-			fmt.Fprintf(w, "%s, %s, %s\n", bk.Title, bk.Author, bk.Read)
-		}
 	}
 }
