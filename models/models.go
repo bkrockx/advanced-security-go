@@ -55,7 +55,8 @@ func NameQuery(r string) ([]Book, error) {
 // the query, you should be using a parameterized query.
 func AuthorQuery(r string) ([]Book, error) {
 	// Fix: rows, err := DB.Query("SELECT * FROM books WHERE author = ?", r)
-	rows, err := DB.Query(fmt.Sprintf("SELECT * FROM books WHERE author = '%s'", r))
+	query := fmt.Sprintf("SELECT * FROM books WHERE author = '%s'", r)
+	rows, err := DB.Query(query)
 	if err != nil {
 		return nil, err
 	}
